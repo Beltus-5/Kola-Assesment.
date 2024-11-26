@@ -143,4 +143,70 @@ test.describe("Registration Page Test", () => {
     expect(locators.lastNameError).toContainText("Please fill in this field");
   });
 
+  // ============================================Email==============================================================
+
+  test("Verify Email Field Correctly Validates valid email format", async ({
+    page,
+  }) => {
+    const locators = await fieldsLocators(page);
+
+    //Enter valid First name
+    await locators.firstName.fill(user.first_name[0]);
+    //Enter valid Last name
+    await locators.lastName.fill(user.last_name[0]);
+    //Enters valid Email
+    await locators.email.fill(user.email_[0]);
+    await locators.submitButton.click();
+    //Asserts john.smith@example.com is displayed in the input box after filling
+    expect(locators.email).toHaveValue(user.email_[0]);
+
+  });
+
+  test('Verify Email Field Correctly Rejects User Profile Creation Wth Missing "@" Symbol', async ({
+    page,
+  }) => {
+    const locators = await fieldsLocators(page);
+
+    //Enter valid First name
+    await locators.firstName.fill(user.first_name[0]);
+    //Enter valid Last name
+    await locators.lastName.fill(user.last_name[0]);
+    //Enters invalid Email
+    await locators.email.fill(user.email_[1]);
+
+    await locators.submitButton.click();
+    expect(locators.emailError).toContainText("Email is not valid");
+  });
+
+  test("Verify Email Field Correctly Rejects Profile Creation With Invalid Email (Missing Domain)", async ({
+    page,
+  }) => {
+    const locators = await fieldsLocators(page);
+
+    //Enter valid First name
+    await locators.firstName.fill(user.first_name[0]);
+    //Enter valid Last name
+    await locators.lastName.fill(user.last_name[0]);
+    //Enters invalid Email
+    await locators.email.fill(user.email_[2]);
+
+    await locators.submitButton.click();
+    expect(locators.emailError).toContainText("Email is not valid");
+
+  });
+
+  test("Verify Email Field throws an error if left empty", async ({
+    page,
+  }) => {
+    const locators = await fieldsLocators(page);
+    //verify the first name input field is enabled
+    await expect(locators.email).toBeEnabled();
+
+    //Enters Invalid first name
+    await locators.email.fill(user.email_[3]);
+
+    await locators.submitButton.click();
+    expect(locators.emailError).toContainText("Please fill in this field");
+  });
+
 })
