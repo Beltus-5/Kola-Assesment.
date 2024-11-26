@@ -306,4 +306,16 @@ test.describe("Registration Page Test", () => {
     expect(locators.confirmPasswordError).toContainText("Please fill in this field");
   });
 
+  // ============================================Gender==============================================================
+
+  test("Verify Gender Field Options Selection Checks On Click Correctly", async ({
+    page,
+  }) => {
+    const locators = await fieldsLocators(page);
+
+    //Gender selection Female
+    await locators.genderFemale.check();
+    await expect(locators.genderFemale).toBeChecked();
+  });
+
 })
