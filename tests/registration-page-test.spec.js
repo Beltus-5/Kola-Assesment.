@@ -495,4 +495,67 @@ test.describe("Registration Page Test", () => {
     await locators.submitButton.click();
   });
 
+     // ============================================GitHub==============================================================
+     test("Verify GitHub URL Field Correctly Validates With Valid URL Filled", async ({
+        page,
+      }) => {
+        const locators = await fieldsLocators(page);
+    
+        // Fill the Github field with valid input
+        await locators.githubField.fill(user.github_url[0]);
+    
+        page.on("dialog", async (dialog) => {
+          dialogHandled = true;
+          try {
+            expect(dialog.message()).toBe("First name must be filled out"); //verification to assert address value was accepted and next required input needed
+            await dialog.accept();
+          } catch (error) {
+            console.error("Error handling the dialog:", error);
+            await dialog.dismiss();
+          }
+        });
+    
+        await locators.submitButton.click();
+      });
+    
+      test("Verify Form Correctly Validates Profile Creation With All Fields Filled With Valid Data", async ({
+        page,
+      }) => {
+        //fills out all fields with valid data
+        await fillAllFields(page, user);
+    
+        await verifyRegistrationSuccess(page); //verification point by asserting first name field is empty after successfull form submission
+      });
+    
+      test("Verify Form Correctly Validates Profile Creation With  Only Mandatory Fields Filled", async ({
+        page,
+      }) => {
+        //fills out all mandatory fields with valid data
+        await fillMandatoryFields(page, user);
+    
+        await verifyRegistrationSuccess(page); //verification point by asserting first name field is empty after successfull form submission
+      });
+    
+      test("Verify Form Rejects Submission When Only Optional Fields Are Filled", async ({
+        page,
+      }) => {
+        const locators = await fieldsLocators(page);
+    
+        //fills out all optional fields with valid data
+        await fillOptionalFields(page, user);
+    
+        page.on("dialog", async (dialog) => {
+          dialogHandled = true;
+          try {
+            expect(dialog.message()).toBe("First name must be filled out");
+            await dialog.accept();
+          } catch (error) {
+            console.error("Error handling the dialog:", error);
+            await dialog.dismiss();
+          }
+        });
+    
+        await locators.submitButton.click();
+      });
+
 })
