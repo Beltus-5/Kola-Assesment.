@@ -18,3 +18,14 @@ async function fillAllFields(page) {
   await page.locator('#root form button').click();
 
 }
+async function fillMandatoryFields(page) {
+ 
+    await page.locator('input[name="first-name"]').fill(user.first_name[0]);
+    await page.locator('input[name="last-name"]').fill(user.last_name[0]);
+    await page.locator('input[name="email"]').fill(user.email_[0]);
+    await page.locator('input[name="password"]').fill(user.password_[0]);
+    await page.locator('input[name="confirm-password"]').fill(user.confirm_password[0]);
+    await page.locator('#root form button').click();
+  
+  }
+  
