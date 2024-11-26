@@ -209,4 +209,101 @@ test.describe("Registration Page Test", () => {
     expect(locators.emailError).toContainText("Please fill in this field");
   });
 
+   // ============================================Password and Confirm Password==============================================================
+
+   test("Verify Password and Confirm Password Fields Correctly Validates when they match", async ({
+    page,
+  }) => {
+    const locators = await fieldsLocators(page);
+
+    //Enter valid First name
+    await locators.firstName.fill(user.first_name[0]);
+    //Enter valid Last name
+    await locators.lastName.fill(user.last_name[0]);
+    //Enters valid Email
+    await locators.email.fill(user.email_[0]);
+    //Enters valid password
+    await locators.password.fill(user.password_[0]);
+    //Enters valid Confirm password
+    await locators.confirmPassword.fill(user.confirm_password[0]);
+    page.on("dialog", async (dialog) => {
+      // dialogHandled = true;
+      try {
+        // Assert the alert message
+        expect(dialog.message()).toBe("Submission successful"); //verification to assert Linkedinvalue was accepted and next required input needed
+        await dialog.accept();
+      } catch (error) {
+        console.error("Error handling the dialog:", error);
+        await dialog.dismiss();
+      }
+    });
+
+    await locators.submitButton.click();
+
+  });
+
+  test("Verify Password And Confirm Password Field Correctly Rejects User Profile Creation With White Spaces Between Characters", async ({
+    page,
+  }) => {
+    const locators = await fieldsLocators(page);
+
+    //Enter valid First name
+    await locators.firstName.fill(user.first_name[0]);
+    //Enter valid Last name
+    await locators.lastName.fill(user.last_name[0]);
+    //Enters valid Email
+    await locators.email.fill(user.email_[0]);
+    //Enters invalid password
+    await locators.password.fill(user.password_[1]);
+    //Enters invalid Confirm password
+    await locators.confirmPassword.fill(user.confirm_password[1]);
+
+    await locators.submitButton.click();
+    expect(locators.passwordError).toContainText("This field's entry must not have space characters");
+    expect(locators.confirmPasswordError).toContainText("This field's entry must not have space characters");
+
+  });
+
+  test("Verify Password And Confirm Password Correctly Rejects User Profile Creation when they don't match", async ({
+    page,
+  }) => {
+    const locators = await fieldsLocators(page);
+
+    //Enter valid First name
+    await locators.firstName.fill(user.first_name[0]);
+    //Enter valid Last name
+    await locators.lastName.fill(user.last_name[0]);
+    //Enters valid Email
+    await locators.email.fill(user.email_[0]);
+    //Enters valid password
+    await locators.password.fill(user.password_[2]);
+    //Enters valid Confirm password
+    await locators.confirmPassword.fill(user.confirm_password[2]);
+
+    await locators.submitButton.click();
+    expect(locators.passwordError).toContainText("The password fields must match");
+    expect(locators.confirmPasswordError).toContainText("The password fields must match");
+  });
+
+  test("Verify Password And Confirm Password Correctly Rejects User Profile Creation when they are left empty", async ({
+    page,
+  }) => {
+    const locators = await fieldsLocators(page);
+
+    //Enter valid First name
+    await locators.firstName.fill(user.first_name[0]);
+    //Enter valid Last name
+    await locators.lastName.fill(user.last_name[0]);
+    //Enters valid Email
+    await locators.email.fill(user.email_[0]);
+    //Enters valid password
+    await locators.password.fill(user.password_[3]);
+    //Enters valid Confirm password
+    await locators.confirmPassword.fill(user.confirm_password[3]);
+
+    await locators.submitButton.click();
+    expect(locators.passwordError).toContainText("Please fill in this field");
+    expect(locators.confirmPasswordError).toContainText("Please fill in this field");
+  });
+
 })
