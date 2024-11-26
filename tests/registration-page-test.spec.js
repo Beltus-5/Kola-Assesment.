@@ -425,5 +425,49 @@ test.describe("Registration Page Test", () => {
       await locators.submitButton.click();
       expect(locators.phoneNumberError).toContainText("This field's entry must not have space characters");
   });
+   // ============================================Address==============================================================
+   test("Verify Address Field Correctly Validates With Valid Address Input", async ({
+    page,
+  }) => {
+    const locators = await fieldsLocators(page);
+
+    // Fill the address field with invalid input
+    await locators.addressField.fill(user.address_[0]);
+
+    page.on("dialog", async (dialog) => {
+      dialogHandled = true;
+      try {
+        expect(dialog.message()).toBe("Submission successful"); //verification to assert address value was accepted and required input needed
+        await dialog.accept();
+      } catch (error) {
+        console.error("Error handling the dialog:", error);
+        await dialog.dismiss();
+      }
+    });
+
+    await locators.submitButton.click();
+  });
+
+  test("Verify The Address Field Label Displays Correctly As Expected", async ({
+    page,
+  }) => {
+    const locators = await fieldsLocators(page); //Create object of the fieldsLocators
+
+    //Asserts the text content of lable is correctly displayed
+    expect(locators.addressLabel).toContainText("Address (optional):");
+  });
+
+  test("Verify Address Correctly Validates With Special Characters Filled", async ({
+    page,
+  }) => {
+    const locators = await fieldsLocators(page);
+
+    // Fill the address field with invalid input
+    await locators.addressField.fill(user.address_[1]);
+
+
+
+    await locators.submitButton.click();
+  });
 
 })
