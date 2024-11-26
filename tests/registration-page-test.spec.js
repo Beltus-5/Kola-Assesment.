@@ -328,4 +328,102 @@ test.describe("Registration Page Test", () => {
     expect(locators.dobLabel).toContainText("Date of Birth (optional):");
   });
 
+     // ============================================Phone Number==============================================================
+
+  test("Verify Phone Number Field Correctly Validates With Numeric Characters of not morethan 10 digits", async ({
+    page,
+  }) => {
+    const locators = await fieldsLocators(page);
+    
+    //Enter valid First name
+    await locators.firstName.fill(user.first_name[0]);
+    //Enter valid Last name
+    await locators.lastName.fill(user.last_name[0]);
+    //Enters valid Email
+    await locators.email.fill(user.email_[0]);
+    //Enters invalid password
+    await locators.password.fill(user.password_[0]);
+    //Enters invalid Confirm password
+    await locators.confirmPassword.fill(user.confirm_password[0]);
+
+    // Fill the phone number field with a valid numeric input
+    await locators.phoneNumber.fill(user.phone_number[0]);
+    page.on("dialog", async (dialog) => {
+      // dialogHandled = true;
+      try {
+        // Assert the alert message
+        expect(dialog.message()).toBe("Submission successful"); //verification to assert Linkedinvalue was accepted and next required input needed
+        await dialog.accept();
+      } catch (error) {
+        console.error("Error handling the dialog:", error);
+        await dialog.dismiss();
+      }
+    });
+
+    await locators.submitButton.click();
+
+  });
+
+  test("Verify Phone Number Field Correctly  Rejects  Alphabetic Characters", async ({
+    page,
+  }) => {
+    const locators = await fieldsLocators(page);
+        //Enter valid First name
+        await locators.firstName.fill(user.first_name[0]);
+        //Enter valid Last name
+        await locators.lastName.fill(user.last_name[0]);
+        //Enters valid Email
+        await locators.email.fill(user.email_[0]);
+        //Enters invalid password
+        await locators.password.fill(user.password_[0]);
+        //Enters invalid Confirm password
+        await locators.confirmPassword.fill(user.confirm_password[0]);
+
+      // Attempt to fill the phone number field with alphabetic characters
+      await locators.phoneNumber.fill(user.phone_number[1]);
+      await locators.submitButton.click();
+      expect(locators.phoneNumberError).toContainText("Phone number must contain just numerical characters");
+  });
+
+  test("Verify Phone Number Field Correctly  Rejects Numeric characters of morethan 10 digits", async ({
+    page,
+  }) => {
+    const locators = await fieldsLocators(page);
+        //Enter valid First name
+        await locators.firstName.fill(user.first_name[0]);
+        //Enter valid Last name
+        await locators.lastName.fill(user.last_name[0]);
+        //Enters valid Email
+        await locators.email.fill(user.email_[0]);
+        //Enters invalid password
+        await locators.password.fill(user.password_[0]);
+        //Enters invalid Confirm password
+        await locators.confirmPassword.fill(user.confirm_password[0]);
+
+      
+      await locators.phoneNumber.fill(user.phone_number[2]);
+      await locators.submitButton.click();
+      expect(locators.phoneNumberError).toContainText("Phone number must have a max of 10 digits");
+  });
+  test("Verify Phone Number Field Correctly  Rejects Numeric characters with space inbetween", async ({
+    page,
+  }) => {
+    const locators = await fieldsLocators(page);
+        //Enter valid First name
+        await locators.firstName.fill(user.first_name[0]);
+        //Enter valid Last name
+        await locators.lastName.fill(user.last_name[0]);
+        //Enters valid Email
+        await locators.email.fill(user.email_[0]);
+        //Enters invalid password
+        await locators.password.fill(user.password_[0]);
+        //Enters invalid Confirm password
+        await locators.confirmPassword.fill(user.confirm_password[0]);
+
+      
+      await locators.phoneNumber.fill(user.phone_number[3]);
+      await locators.submitButton.click();
+      expect(locators.phoneNumberError).toContainText("This field's entry must not have space characters");
+  });
+
 })
