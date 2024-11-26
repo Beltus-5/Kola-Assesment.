@@ -318,4 +318,14 @@ test.describe("Registration Page Test", () => {
     await expect(locators.genderFemale).toBeChecked();
   });
 
+   // ============================================DOB==============================================================
+
+   test("Verify Date Of Birth Field Label Displays Correctly As Expected", async ({
+    page,
+  }) => {
+    const locators = await fieldsLocators(page);
+    //Asserts the text content of lable is correctly displayed
+    expect(locators.dobLabel).toContainText("Date of Birth (optional):");
+  });
+
 })
