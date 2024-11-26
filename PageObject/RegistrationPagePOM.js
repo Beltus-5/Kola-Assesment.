@@ -93,3 +93,13 @@ async function fillOptionalFields(page) {
     };
   
   }
+
+  async function verifyRegistrationSuccess(page) {
+    const firstNameValue = await page.inputValue('#first-name');
+      expect(firstNameValue).toBe('');
+  }
+  
+  
+  module.exports = { fillAllFields, verifyRegistrationSuccess, fieldsLocators, fillMandatoryFields, fillOptionalFields };
+  
+  
